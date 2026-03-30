@@ -7,4 +7,6 @@ int main(){
     suma_pruebas();
 
     resta_pruebas();
+
+    multiplicacion_prueba();
 }

@@ -83,3 +83,19 @@ void resta_pruebas(){
     std::cout << "resultado=" << resta_multi[0] << "; prestamo=" << resta_multi[1] << std::endl;
 
 }
+
+void multiplicacion_prueba(){
+    // Multipliación simple
+    LargeNumber numero_1(14);
+    numero_1.mulWord(456);
+    std::cout << numero_1[0] << std::endl;
+
+    // Probando multiplicar un numero muy grande
+    LargeNumber factorial_20(1);
+
+    for(int i = 2; i <= 20; i++){
+        factorial_20.mulWord(i);
+    }
+
+    std::cout << factorial_20[0] << std::endl;
+}

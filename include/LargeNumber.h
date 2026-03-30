@@ -15,7 +15,10 @@ class LargeNumber{
         bool neg; // Saber si es negativo.
 
         // Funciones de apoyo
-        static size_t wordBits(){return sizeof(word) * CHAR_BIT;}
+        static size_t wordBits(){return sizeof(word) * CHAR_BIT;} // Nos devuelve la cantidad de bits de la palabra en formato size_t
+        static word wordMask(){return static_cast<word>(-1);} // Nos da la vuelta a la palabra para poder empezar desde lo más bajo
+        // A la cadena dada la vuelta, calculamos el número de bits y devolvemos la mitad para que sea más fácil trabajar con ellos
+        static word wordHalfMask(){return wordMask() >> (wordBits() / 2);} 
 
         // Funciones de apoyo para el vector
         size_t size() const {return words.size();} // Devuelve el tamaño del vector
@@ -140,6 +143,67 @@ class LargeNumber{
             LargeNumber r(a); // Se crea un clon para no variar el valor de a, así machacamos r y no variamos su valor original
             return subUnisgnedOverwrite(r, b);
         }
+
+        // Multiplicación
+        /*
+            Dentro de este cáculo existe un problema, cuando se tienen que calcular multiplicaciones exageradamente grandes (muchos bits)
+            C++ no nos da más de 64 bits, por lo que para ello lo dividiremos cada uno en dos de 32 bits.
+            Esto nos permite calcular elemento específicos como las permutaciones o algunos LargeNumber por una palabra.
+            Pero todavía nos queda el caso de multiplicar cadenas de palabras completas.
+        */
+
+        /*
+            Esta función puede ser muy complicada de entender, por eso utilizamoremos un ejemplo para explicarla
+
+            Vamos a plantear la multiplicación de dos números tales 200 * 180 = 36000, necesita de 16 bits para ser reprenstado
+            Si introduces esta multiplicación en C++, solo te va a dar la parte baja de la multipliación:
+            200 * 180 = 36000 = 140 * 256 + 160, parte alta = 140, parte baja = 160
+            C++ te devuelve 160, con la siguiente función obtenemos la parte alta
+            ambas partes requieren de 8 bits por lo que trabajaremos con esta cantidad.
+        */ 
+
+        static word wordMulHi(word a, word b){
+            size_t number_bits = wordBits() / 2; // Pasamos a tener 4 bits
+            
+            // 200 >> 4 = 12
+            word a_higher_number = a >> number_bits; // Desplaza el número de bits hacia la derecha como indica el valor de number_bits de la palabra a 
+            // 200 & 0x0F = 11001000 & 00001111 = 00001000 = 8
+            word a_lower_number = a & wordHalfMask(); // Desplaza el número de bits hacia la derecha como indica el valor de number_bits de la palabra pero invertida
+
+            // 180 >> 4 = 11
+            word b_higher_number = b >> number_bits;
+            // 180 & 0x0F = 10110100 & 00001111 = 00000100 = 4
+            word b_lower_number = b & wordHalfMask();
+
+            // temp = ((8 * 4) >> 4) + 12 * 4 = (32 >> 4) + 48 = 2 + 48 = 50
+            word temp = ((a_lower_number * b_lower_number) >> number_bits) + a_higher_number * b_lower_number;
+
+            // temp = (50 >> 4) + ((8 * 11 + (50 & 0x0F)) >> 4) = (50 >> 4) + ((88 + 2) >> 4) = 3 + (90 >> 4) = 3 + 5 = 8
+            temp = (temp >> number_bits) + ((a_lower_number * b_higher_number + (temp & wordHalfMask())) >> number_bits);
+        
+            // return = 8 + 12 * 11 = 8 + 132 = 140
+            return temp + a_higher_number * b_higher_number;
+        }
+
+        LargeNumber& mulWord(word b){
+            word carry = 0;
+
+            for(size_t i = 0; i < size(); i++){
+                word a = (*this)[i];
+                word tmp = a * b;
+
+                carry = addCarry(&tmp, carry);
+                carry += wordMulHi(a, b);
+
+                (*this)[i] = tmp;
+            }
+
+            if(carry) push_back(carry);
+
+            return truncate();
+        }
+
+        // División
         
 };
 
