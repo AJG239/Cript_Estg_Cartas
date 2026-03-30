@@ -5,4 +5,6 @@ int main(){
     constructore_prueba();
 
     suma_pruebas();
+
+    resta_pruebas();
 }

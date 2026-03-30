@@ -2,7 +2,7 @@
 #include "../include/LargeNumber.h"
 
 void constructore_prueba() {
-    std::cout << "=== Constructores ===" << std::endl;
+    std::cout << "Prueba de Constructores" << std::endl;
 
     // BigNum vacío = 0
     LargeNumber cero;
@@ -37,7 +37,7 @@ void constructore_prueba() {
 }
 
 void suma_pruebas(){
-    std::cout << "=== Sumas ===" << std::endl;
+    std::cout << "Prueba de funciones:Sumas" << std::endl;
 
     // Suma con acarreo simple
     LargeNumber number_1(100);
@@ -57,4 +57,29 @@ void suma_pruebas(){
     LargeNumber suma_max = LargeNumber::addUnsigned(max_word, number_3);
 
     std::cout << suma_max[0] << ";" << suma_max[1] << std::endl;
+}
+
+void resta_pruebas(){
+    std::cout << "Prueba de funciones: Resta" << std::endl;
+
+    // Resta simple con préstamo
+    LargeNumber number_1(500);
+    LargeNumber number_2(260);
+
+    LargeNumber resta = LargeNumber::subUnsigned(number_1, number_2);
+
+    std::cout << "500 - 260 = " << resta[0] << std::endl;
+
+    // Resta de varias palabras
+    LargeNumber number_3;
+   
+    number_3.push_back(4);
+    number_3.push_back(16);
+
+    LargeNumber number_4(7);
+
+    LargeNumber resta_multi = LargeNumber::subUnsigned(number_3, number_4);
+
+    std::cout << "resultado=" << resta_multi[0] << "; prestamo=" << resta_multi[1] << std::endl;
+
 }

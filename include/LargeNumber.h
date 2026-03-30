@@ -66,6 +66,9 @@ class LargeNumber{
         }
 
         // Funciones Aritmeticas
+
+        // Sumas
+
         /* 
            El objetivo de este función es que cuando se calcula la suma de los dos vectores
            comprobar que existe acarreo, es decir, cuando se excede del valor máximo que puede
@@ -73,15 +76,6 @@ class LargeNumber{
         */
         static word addCarry(word* a, word b){
             return (*a += b) < b; // Permite saber si existe acarreo en el calculo
-        }
-
-         /* 
-           El objetivo de este función es que cuando se calcula la resta de los dos vectores
-           comprobar que existe un préstamo, es decir, cuando se 
-        */
-        static word subCarry(word* a, word b){
-            word temp = *a;
-            return(*a = temp - b ) > temp; // Si se cumple esta condición es que existe préstamo
         }
 
         static LargeNumber& addUnsignedOverwrite(LargeNumber& a, const LargeNumber& b){
@@ -109,8 +103,42 @@ class LargeNumber{
 
         // Versión que no modifica los valores originales. Crea una copia
         static LargeNumber addUnsigned(const LargeNumber& a, const LargeNumber& b){
-            LargeNumber r(a);
+            LargeNumber r(a); // Se crea un clon para no variar el valor de a, así machacamos r y no variamos su valor original
             return addUnsignedOverwrite(r, b);
+        }
+
+        // Restas
+        /* 
+           El objetivo de este función es que cuando se calcula la resta de los dos vectores
+           comprobar que existe un préstamo, es decir, cuando se 
+        */
+        static word subCarry(word* a, word b){
+            word temp = *a;
+            return(*a = temp - b ) > temp; // Si se cumple esta condición es que existe préstamo
+        }
+
+        static LargeNumber& subUnisgnedOverwrite(LargeNumber& a,const LargeNumber& b){
+            // No hace falta comprobar el tamaño porque a >= b
+            size_t size_a = a.size(), size_b = b.size();
+            
+            word carry = 0;
+            size_t i;
+
+            // Restamos los elementos que contienen palabras
+            for(i = 0; i < size_b; i++){
+                carry = subCarry(&a[i], carry);
+                carry += subCarry(&a[i], b[i]);
+            }
+
+            // Propaga el prestamo a los elementos restanttes de a
+            for(; i < size_a && carry; i++){carry = subCarry(&a[i], carry);}
+            
+            return a.truncate();
+        }  
+
+        static LargeNumber subUnsigned(const LargeNumber& a, const LargeNumber& b){
+            LargeNumber r(a); // Se crea un clon para no variar el valor de a, así machacamos r y no variamos su valor original
+            return subUnisgnedOverwrite(r, b);
         }
         
 };
