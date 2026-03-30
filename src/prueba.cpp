@@ -35,3 +35,26 @@ void constructore_prueba() {
     std::cout << "d[0] = " << d[0] << std::endl; // 42
     // Esperado: size=1, d[0]=42
 }
+
+void suma_pruebas(){
+    std::cout << "=== Sumas ===" << std::endl;
+
+    // Suma con acarreo simple
+    LargeNumber number_1(100);
+    LargeNumber number_2(200);
+
+    LargeNumber suma = LargeNumber::addUnsigned(number_1, number_2);
+
+    std::cout << "100 + 200 = " << suma[0] << std::endl;
+
+    // Suma con desbordamiento, añadimos el máximo número de bits disponibles
+    LargeNumber max_word;
+
+    max_word.push_back(UINT64_MAX); // 2^64 - 1
+
+    LargeNumber number_3(1);
+
+    LargeNumber suma_max = LargeNumber::addUnsigned(max_word, number_3);
+
+    std::cout << suma_max[0] << ";" << suma_max[1] << std::endl;
+}

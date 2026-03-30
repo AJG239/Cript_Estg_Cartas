@@ -92,18 +92,26 @@ class LargeNumber{
             word carry = 0;
             size_t i;
             
+            // Sumamos los elementos que contienen palabras
             for (i = 0; i < size_b; i++){
-                carry = addCarry(&a.words[i], carry);
-                carry += addCarry(&a.words[i], b.words[i]);
+                carry = addCarry(&a[i], carry);
+                carry += addCarry(&a[i], b[i]);
             }
 
-            for (; i < size_max && carry; i++) carry = addCarry(&a.words[i], carry);
+            // Propaga el acarreo a los elementos restanttes de a
+            for (; i < size_max && carry; i++) carry = addCarry(&a[i], carry);
 
+            // Si después de propagar el acarreo aún queda uno, lo añadimos al final del vector
             if (carry) a.push_back(carry);
 
             return a.truncate();
         }
 
+        // Versión que no modifica los valores originales. Crea una copia
+        static LargeNumber addUnsigned(const LargeNumber& a, const LargeNumber& b){
+            LargeNumber r(a);
+            return addUnsignedOverwrite(r, b);
+        }
         
 };
 
