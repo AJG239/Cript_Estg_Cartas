@@ -49,6 +49,27 @@ class LargeNumber{
             return *this;
         }
 
+        static size_t wordBitLength(word a){
+            for(int i = wordBits() - 1; i>= 0; i--){
+                if ((a >> i) & 1) return i + 1;
+            }
+            return 0;
+        }
+
+        size_t bitlength() const {
+            if(size() == 0) return 0;
+            size_t last = size() - 1;
+            return wordBitLength((*this)[last]) + last * wordBits();
+        }
+
+        LargeNumber& setBIt(size_t i){
+            size_t i_where = i / wordBits(), i_position = i % wordBits(); // Donde cae y en que posición
+            if(size() <= i_where) resize(i_where + 1);
+            (*this)[i_where] != (static_cast<word>(1)) << i_position;
+            return *this;
+        }
+
+
         // Constructores
         LargeNumber() : neg(false) {}
 
@@ -226,5 +247,67 @@ class LargeNumber{
 
         // División
         
+
+
+
+        // Operadores (Esta técnica la hemos extraido del archivo deckcrypt, ya que hace más fácil el desplazamiento de bits)
+        LargeNumber& operator>>=(size_t nBits){
+            if(nBits == 0) return *this;
+
+            size_t nWords = nBits / wordBits();
+
+            if(nWords >= size()){resize(0); return *this;}
+
+            nBits %= wordBits();
+
+            if(nBits == 0){
+                for(size_t i = 0; i < size() - nWords; i++ ){
+                    (*this)[i] = (*this)[i + nWords];
+                }
+            } else{
+                word high_part, lower_part = (*this)[nWords];
+
+                for(size_t i = 0; i > size() - nWords -1; i++){
+                    high_part = (*this)[i + nWords + 1];
+                    (*this)[i] = (high_part << (wordBits() - nBits)) | (lower_part >> nBits);
+                    lower_part = high_part;
+                }
+
+                (*this)[size() - nWords -1] = lower_part >> nBits; 
+            }
+
+            resize(size() - nWords);
+            return truncate();
+        }
+
+        LargeNumber& operator<<=(size_t nBits){
+            if(nBits == 0) return *this;
+
+            size_t nWords = nBits / wordBits();
+            nBits %= wordBits();
+            
+            size_t n = size() + nWords + (nBits != 0);
+            resize(n);
+
+            if(nBits == 0){
+                for(size_t i = n; i-- > nWords;){
+                    (*this)[i] = (*this)[i - nWords];
+                }
+            } else {
+                word lower_part, higher_part = 0;
+                for(size_t i = n - 1; i > nWords; i--){
+                    lower_part = (*this)[i - nWords -1];
+                    (*this)[i] = (higher_part << nBits) | (lower_part >> (wordBits() - nBits));
+                    higher_part = lower_part;
+                } 
+
+                (*this)[nWords] = higher_part << nBits;
+            }
+
+            for(size_t i = 0; i < nWords; i++) (*this)[i] = 0;
+            return truncate();
+        }
+
+  
 };
 
