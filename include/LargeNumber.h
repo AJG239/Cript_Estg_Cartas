@@ -58,14 +58,15 @@ class LargeNumber{
 
         size_t bitlength() const {
             if(size() == 0) return 0;
-            size_t last = size() - 1;
-            return wordBitLength((*this)[last]) + last * wordBits();
+            size_t last = size() - 1; // Sacams el índice de la última palabra
+            // Calculamos la longitude de la palabra cogiendo la última palabra y sumando las palabras anteriores
+            return wordBitLength((*this)[last]) + last * wordBits(); 
         }
 
         LargeNumber& setBIt(size_t i){
-            size_t i_where = i / wordBits(), i_position = i % wordBits(); // Donde cae y en que posición
-            if(size() <= i_where) resize(i_where + 1);
-            (*this)[i_where] != (static_cast<word>(1)) << i_position;
+            size_t i_where = i / wordBits(), i_position = i % wordBits(); // En que palabra cae y en que posición dentro de esta
+            if(size() <= i_where) resize(i_where + 1); // Comprobación de si la palabra es pequeña y necesita aumentar su tamaño
+            (*this)[i_where] != (static_cast<word>(1)) << i_position; // Ponemos a 1
             return *this;
         }
 
@@ -246,9 +247,72 @@ class LargeNumber{
         }
 
         // División
-        
+        // Comparación de valores absolutos
+        static int compareAbsolutes(const LargeNumber& a, const LargeNumber& b){
+            // Comparamos la cantidad de palabras que tienen cada uno, si son distintas pues se devuelve cual tiene más
+            if(a.size() != b.size()){
+                return a.size() < b.size() ? -1 : 1;
+            }
+            
+            // En caso de que tengan la misma cantidad de palabras, empezamos a comparar desde la más alta.
+            for(size_t i = a.size(); i-- > 0;){
+                if(a[i] != b[i]) return a[i] < b[i] ? -1 : 1;
+            }
+  
+            return 0;
+        }
 
+        // Comprobar problemas con la división
+        static void divMod(const LargeNumber& num, LargeNumber den, LargeNumber& quot, LargeNumber& rem){
+            quot = 0; // Cociente empieza en 0
+            rem = num; // Resto empieza siendo el dividendo entero
 
+            if(compareAbsolutes(rem, den) >= 0){ // Si el dividento es menor que el divisor, no se puede dividir.
+                int n = num.bitlength() - den.bitlength(); // Calcular la diferencia de tamaño
+                den <<= n; // Desplazamos los bits hacia la izquiera, con respecto a la diferencia de tamaño para poder alinearlo con el dividendo.
+                
+                for(; n >= 0; n--){
+                    if(compareAbsolutes(rem, den) >= 0){ // Comprobamos tamaños, si entra seguimos
+                        subUnisgnedOverwrite(rem, den); // Restamos dividendo y divisor
+                        quot.setBIt(n); // Ponemos 1 en el cociente
+                    }
+                    den >>= 1; // Desplazamos un bit a la derecha
+                }
+            }
+
+            quot.setNeg(num.neg ^ den.neg);
+            rem.setNeg(num.neg);
+        }
+
+        /*
+            Divisió clásica en base 2^32, esto nos permite hacer cálculos más rápidos que la otra función de división.
+            El único problema es que solo se puede utilizar cuando el divisor cabe en una sola palabra.
+        */  
+        static void divModHalfWord(const LargeNumber& num, word den, LargeNumber& quot, word& rem){
+            rem = 0; 
+
+            LargeNumber dst(num.size(), 0);
+
+            for(size_t i = num.size(); i-- > 0;){
+                word dstWord = 0;
+                word src = num[i];
+                word parts[2] = {src >> (wordBits() / 2), src & wordHalfMask()};
+
+                for(int j = 0; j < 2; j++){
+                    rem <<= wordBits() / 2;
+                    rem |= parts[j];
+                    word dw = rem / den;
+                    rem = rem % den;
+
+                    dstWord <<= wordBits() / 2;
+                    dstWord |= dw;
+                }
+
+                dst[i] = dstWord;
+            }
+
+            quot = dst.truncate().setNeg(num.neg);
+        }
 
         // Operadores (Esta técnica la hemos extraido del archivo deckcrypt, ya que hace más fácil el desplazamiento de bits)
         LargeNumber& operator>>=(size_t nBits){
@@ -308,6 +372,7 @@ class LargeNumber{
             return truncate();
         }
 
-  
+        LargeNumber operator>>(size_t n) const { return LargeNumber(*this) >>= n;}
+        LargeNumber operator<<(size_t n) const { return LargeNumber(*this) <<= n;}
 };
 

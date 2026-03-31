@@ -9,4 +9,6 @@ int main(){
     resta_pruebas();
 
     multiplicacion_prueba();
+
+    division_prueba();
 }

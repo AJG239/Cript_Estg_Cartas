@@ -108,3 +108,17 @@ void multiplicacion_prueba(){
     std::cout << "LargeNumber result:" << result[0] << std::endl;
 
 }
+
+void division_prueba(){
+    // División simple
+    LargeNumber number_1(17), number_2(5), cociente, resto;
+    LargeNumber::divMod(number_1, number_2, cociente, resto);
+
+    std::cout << "21 / 5 = " << cociente[0] << " resto " << resto[0] << std::endl;
+
+    // División de numero pequeños
+    LargeNumber cociente_2;
+    uint64_t resto_2;
+    LargeNumber::divModHalfWord(LargeNumber(35879), 7, cociente_2, resto_2);
+    std::cout << "35879 / 7 = " << cociente_2[0] << " resto " << resto_2 << std::endl;
+}
