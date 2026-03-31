@@ -202,6 +202,27 @@ class LargeNumber{
 
             return truncate();
         }
+        /*
+            El proceso que vamos a seguir es la multiplicación de dos palabra, lo que va a generar
+            un coste elevado computacional. Vamos a explicar el proceso y las variables.
+            c --> Es donde acumulamos el resultado de la multiplicación
+            carries --> Es donde acumulamos los acarreos que se van generando en cada multiplicación
+        */
+        static LargeNumber mulLong(const LargeNumber& a, const LargeNumber& b){
+            size_t size_a = a.size(), size_b = b.size(), max_size = size_a + size_b + 1;
+            
+            LargeNumber c(max_size, 0, a.neg xor b.neg), carries(max_size, 0);
+
+            for(size_t i = 0; i < size_a; i++){
+                for(size_t j = 0; j < size_b; j++){
+                    size_t index_c = i + j, index_carries = index_c + 1;
+
+                    carries[index_carries] += addCarry(&c[index_c], a[i] * b[j]);
+                    carries[index_carries + 1] += addCarry(&c[index_carries], wordMulHi(a[i], b[j]));
+                }
+            }
+            return addUnsignedOverwrite(c, carries).truncate();
+        }
 
         // División
         

@@ -98,4 +98,13 @@ void multiplicacion_prueba(){
     }
 
     std::cout << factorial_20[0] << std::endl;
+
+    // Multiplicar dos palabras
+    LargeNumber numero_2(98765);
+    LargeNumber numero_3(43211);
+
+    LargeNumber result = LargeNumber::mulLong(numero_2, numero_3);
+
+    std::cout << "LargeNumber result:" << result[0] << std::endl;
+
 }
