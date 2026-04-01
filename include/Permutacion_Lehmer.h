@@ -1,3 +1,4 @@
+#pragma once
 #include "LargeNumber.h"
 #include "Factoradico.h"
 #include <vector>

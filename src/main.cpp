@@ -2,15 +2,7 @@
 #include "prueba.cpp"
 
 int main(){
-    constructore_prueba();
+    carga_cache();
 
-    suma_pruebas();
-
-    resta_pruebas();
-
-    multiplicacion_prueba();
-
-    division_prueba();
-
-    pruebas_string();
+    numero_a_factoradico();
 }

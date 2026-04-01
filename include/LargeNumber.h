@@ -1,3 +1,4 @@
+#pragma once
 #include <cmath>
 #include <cstdint>
 #include <climits>
@@ -19,6 +20,14 @@ class LargeNumber{
         static word wordMask(){return static_cast<word>(-1);} // Nos da la vuelta a la palabra para poder empezar desde lo más bajo
         // A la cadena dada la vuelta, calculamos el número de bits y devolvemos la mitad para que sea más fácil trabajar con ellos
         static word wordHalfMask(){return wordMask() >> (wordBits() / 2);} 
+
+        static int comparar_numeros(const LargeNumber& a, const LargeNumber& b){
+            if(a.size() == 0 && b.size() == 0) return 0;
+
+            if(!a.neg && !b.neg) return compareAbsolutes(a, b);
+            
+            return a.neg ? -1: 1;
+        }
 
         // Funciones de apoyo para el vector
         size_t size() const {return words.size();} // Devuelve el tamaño del vector

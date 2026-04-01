@@ -1,5 +1,7 @@
+#pragma once
 #include <iostream>
 #include "../include/LargeNumber.h"
+#include "../include/Factoradico.h"
 
 void constructore_prueba() {
     std::cout << "Prueba de Constructores" << std::endl;
@@ -137,4 +139,20 @@ void pruebas_string(){
     std::cout << "123 / 6 = " << cociente[0] << " resto " << resto[0] << std::endl;
 
     std::cout << "100 + 200 = " << LargeNumber::addUnsigned(LargeNumber(100), LargeNumber(200)) << std::endl;
+}
+
+void carga_cache(){
+    std::cout << "10! = " << Factoradico::factorial(10) << std::endl;
+
+    std::cout << "52! = " << Factoradico::factorial(52) << std::endl;
+}
+
+void numero_a_factoradico(){
+    std::vector<LargeNumber> f17 = Factoradico::NumeroAFactoradico(LargeNumber(17));
+    std::cout << "17 en factoradic: [";
+    for (size_t i = 0; i < f17.size(); i++) {
+        if (i > 0) std::cout << ", ";
+        std::cout << f17[i];
+    }
+    std::cout << "]" << std::endl;
 }
