@@ -66,7 +66,7 @@ class LargeNumber{
         LargeNumber& setBIt(size_t i){
             size_t i_where = i / wordBits(), i_position = i % wordBits(); // En que palabra cae y en que posición dentro de esta
             if(size() <= i_where) resize(i_where + 1); // Comprobación de si la palabra es pequeña y necesita aumentar su tamaño
-            (*this)[i_where] != (static_cast<word>(1)) << i_position; // Ponemos a 1
+            (*this)[i_where] |= (static_cast<word>(1)) << i_position; // Ponemos a 1
             return *this;
         }
 
@@ -251,12 +251,12 @@ class LargeNumber{
         static int compareAbsolutes(const LargeNumber& a, const LargeNumber& b){
             // Comparamos la cantidad de palabras que tienen cada uno, si son distintas pues se devuelve cual tiene más
             if(a.size() != b.size()){
-                return a.size() < b.size() ? -1 : 1;
+                return a.size() < b.size() ? -1 : +1;
             }
             
             // En caso de que tengan la misma cantidad de palabras, empezamos a comparar desde la más alta.
             for(size_t i = a.size(); i-- > 0;){
-                if(a[i] != b[i]) return a[i] < b[i] ? -1 : 1;
+                if(a[i] != b[i]) return a[i] < b[i] ? -1 : +1;
             }
   
             return 0;
@@ -314,6 +314,11 @@ class LargeNumber{
             quot = dst.truncate().setNeg(num.neg);
         }
 
+        // Transformaciones a string
+        std::string toString() const {
+
+        }
+
         // Operadores (Esta técnica la hemos extraido del archivo deckcrypt, ya que hace más fácil el desplazamiento de bits)
         LargeNumber& operator>>=(size_t nBits){
             if(nBits == 0) return *this;
@@ -331,7 +336,7 @@ class LargeNumber{
             } else{
                 word high_part, lower_part = (*this)[nWords];
 
-                for(size_t i = 0; i > size() - nWords -1; i++){
+                for(size_t i = 0; i < size() - nWords -1; i++){
                     high_part = (*this)[i + nWords + 1];
                     (*this)[i] = (high_part << (wordBits() - nBits)) | (lower_part >> nBits);
                     lower_part = high_part;

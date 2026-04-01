@@ -111,8 +111,8 @@ void multiplicacion_prueba(){
 
 void division_prueba(){
     // División simple
-    LargeNumber number_1(17), number_2(5), cociente, resto;
-    LargeNumber::divMod(number_1, number_2, cociente, resto);
+    LargeNumber cociente, resto;
+    LargeNumber::divMod(LargeNumber(21), LargeNumber(5), cociente, resto);
 
     std::cout << "21 / 5 = " << cociente[0] << " resto " << resto[0] << std::endl;
 
