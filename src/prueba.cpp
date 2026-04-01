@@ -122,3 +122,19 @@ void division_prueba(){
     LargeNumber::divModHalfWord(LargeNumber(35879), 7, cociente_2, resto_2);
     std::cout << "35879 / 7 = " << cociente_2[0] << " resto " << resto_2 << std::endl;
 }
+
+void pruebas_string(){
+    LargeNumber factorial_10(1);
+
+    for (int i = 2; i <= 10; i++){
+        factorial_10.mulWord(i);
+    }
+
+    std::cout << "10! = " << factorial_10 << std::endl;
+
+    LargeNumber cociente, resto;
+    LargeNumber::divMod(LargeNumber(17), LargeNumber(5), cociente, resto);
+    std::cout << "123 / 6 = " << cociente[0] << " resto " << resto[0] << std::endl;
+
+    std::cout << "100 + 200 = " << LargeNumber::addUnsigned(LargeNumber(100), LargeNumber(200)) << std::endl;
+}

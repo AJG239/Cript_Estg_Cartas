@@ -315,8 +315,34 @@ class LargeNumber{
         }
 
         // Transformaciones a string
+        /*
+            Convierte el BigNum a string decimal. Divide entre 10 repetidamente, cada resto es un dígito. Los dígitos salen al revés, así que se invierte al final.
+        */
         std::string toString() const {
+            if(size() == 0) return "0";
 
+            std::string result;
+            LargeNumber tmp(*this);
+
+            while(tmp.size() > 0){
+                word remainder;
+                divModHalfWord(tmp, 10, tmp, remainder);
+                result.push_back('0' + remainder);
+            }
+
+            if(neg) result.push_back('-');
+            std::reverse(result.begin(), result.end());
+            return result;
+        }
+
+        //Para poder interactuar con los valores dados y poder imprimirlos se hace los siguiente
+        /*
+            Lo que nos permite friend es añadirle una nueva funcionalidad a un método ya creado.
+            modificamos ostream para poder modificar el flujo de salida, así podremos imprimir nuestros valores
+        */
+        friend std::ostream& operator<<(std::ostream& out, const LargeNumber& num) {
+            out << num.toString();
+            return out;
         }
 
         // Operadores (Esta técnica la hemos extraido del archivo deckcrypt, ya que hace más fácil el desplazamiento de bits)

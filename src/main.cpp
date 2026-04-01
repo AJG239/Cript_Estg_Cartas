@@ -11,4 +11,6 @@ int main(){
     multiplicacion_prueba();
 
     division_prueba();
+
+    pruebas_string();
 }
