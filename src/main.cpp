@@ -5,4 +5,5 @@ int main(){
     carga_cache();
 
     numero_a_factoradico();
+    factoradico_a_numero();
 }

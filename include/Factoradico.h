@@ -36,10 +36,24 @@ class Factoradico{
             int divisor = 1; // Divisor incremental
 
             while(LargeNumber::comparar_numeros(num, LargeNumber(0))){
-                LargeNumber::divMod(num, divisor, q, r);
-                result.insert(result.begin(), r);
-                num = q;
-                divisor++;
+                LargeNumber::divMod(num, divisor, q, r); // Hacemos la división para obtener el cociente y el resto
+                result.insert(result.begin(), r); // Insertamos el resto en la primera posición
+                num = q; // Cambiamos el número por el cociente para seguir dividiendo
+                divisor++; // Incrementamos el divisor
+            }
+
+            return result;
+        }
+
+        static LargeNumber FactoradicoANumero(const std::vector<LargeNumber>& fact){
+            iniciar_Cache(); // Iniciamos cache por si acaso no se ha iniciado antes
+
+            LargeNumber result(0); // Neesitamos instancia el valor a 0 para poder ir sumando los resultados
+            int size = static_cast<int>(fact.size()); // Sacamos el tamaño del vector para poder desplazarnos por él
+
+            // Para cada elemento del vector, lo multiplicamos por el factorial y lo sumamos al resultado
+            for(int i = 0; i < size; i++){
+                result = LargeNumber::addUnsigned(result, LargeNumber::mulLong(fact[i], factorial(size-i-1)));
             }
 
             return result;

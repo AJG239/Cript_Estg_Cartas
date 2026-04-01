@@ -156,3 +156,9 @@ void numero_a_factoradico(){
     }
     std::cout << "]" << std::endl;
 }
+
+void factoradico_a_numero(){
+    std::vector<LargeNumber> f = {LargeNumber(2), LargeNumber(2), LargeNumber(1), LargeNumber(0)};
+    LargeNumber num = Factoradico::FactoradicoANumero(f);
+    std::cout << "Factoradic [2, 2, 1, 0] a numero: " << num << std::endl;
+}
