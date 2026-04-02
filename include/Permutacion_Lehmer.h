@@ -29,5 +29,18 @@ public:
             permutacion.push_back(lista_lehmer[inidice]);
             lista_lehmer.erase(lista_lehmer.begin() + inidice);
         }
+
+        return permutacion;
+    }
+
+    static void printPermutation(const std::vector<int>& perm){
+        std::cout << "[";
+
+        for(int i = 0; i < perm.size(); i++){
+            if(i > 0) std::cout << ",";
+            std::cout << perm[i];
+        }
+
+        std::cout << "]";
     }
 };

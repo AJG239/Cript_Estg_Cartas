@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../include/LargeNumber.h"
 #include "../include/Factoradico.h"
+#include "../include/Permutacion_Lehmer.h"
 
 void constructore_prueba() {
     std::cout << "Prueba de Constructores" << std::endl;
@@ -161,4 +162,12 @@ void factoradico_a_numero(){
     std::vector<LargeNumber> f = {LargeNumber(2), LargeNumber(2), LargeNumber(1), LargeNumber(0)};
     LargeNumber num = Factoradico::FactoradicoANumero(f);
     std::cout << "Factoradic [2, 2, 1, 0] a numero: " << num << std::endl;
+}
+
+
+void numero_permutacion(){
+    std::vector<int> permLast = Permutacion_Lehmer::NumeroAPermutacion(LargeNumber(46), 5);
+    std::cout << "46 con 5 elementos: ";
+    Permutacion_Lehmer::printPermutation(permLast);
+    std::cout << std::endl;
 }

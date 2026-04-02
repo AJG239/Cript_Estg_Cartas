@@ -36,7 +36,7 @@ class Factoradico{
             int divisor = 1; // Divisor incremental
 
             while(LargeNumber::comparar_numeros(num, LargeNumber(0))){
-                LargeNumber::divMod(num, divisor, q, r); // Hacemos la división para obtener el cociente y el resto
+                LargeNumber::divMod(num, LargeNumber(divisor), q, r); // Hacemos la división para obtener el cociente y el resto
                 result.insert(result.begin(), r); // Insertamos el resto en la primera posición
                 num = q; // Cambiamos el número por el cociente para seguir dividiendo
                 divisor++; // Incrementamos el divisor
