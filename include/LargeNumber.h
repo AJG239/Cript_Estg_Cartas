@@ -79,6 +79,15 @@ class LargeNumber{
             return *this;
         }
 
+        double toDouble() const{
+            if (size() == 0) return 0.0;
+
+            double d = 0.0, base = std::pow(2.0, wordBits());
+            for (size_t i = size(); i-- > 0;){
+                d = d * base + (*this)[i];
+            }
+            return neg ? -d : d;
+        }
 
         // Constructores
         LargeNumber() : neg(false) {}

@@ -58,6 +58,13 @@ class Factoradico{
 
             return result;
         }
+
+        // Esto se necesita porque estamos trabajando con vectores de 52 elementos y necesita de que se rellenes de ceros
+        static void add_cerosFactoradico(std::vector<LargeNumber>& fact, int size){
+            while(static_cast<int>(fact.size()) < size){
+                fact.insert(fact.begin(), LargeNumber(0)); // Dependiendo del tamaño insertamos tantos ceros como necesitemos
+            }
+        }
 };
 
 // Si no tenemos esta linea no podemos acceder a los valores de cache, es una definción estática.
