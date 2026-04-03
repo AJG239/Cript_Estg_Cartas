@@ -34,7 +34,8 @@ public:
     }
 
     /*
-
+        El objetivo es calcular el Lehmer code de la permutación dada, para poder así transformarlo a 
+        factorádico y conseguir el número que queremos.
     */
     static LargeNumber PermutacionANumero(const std::vector<int>& perm){
         int size = static_cast<int>(perm.size()); // Tamaño del vectore de la permutación
@@ -44,7 +45,8 @@ public:
         for(int i = 0; i < size; i++) num.push_back(i);
 
         // Calcular el códgio Lehmer, buscamos para cada elemento de la permutación su posición de entre los quedan disponibles
-        for (int val : perm){
+        for (int i = 0; i < perm.size(); i++){
+            int val = perm[i];
             // Buscamos en donde esta el valor dentro de num, nos permite instanciar el tipo como double o int.
             auto iterable = std::find(num.begin(), num.end(), val); 
             int index = static_cast<int>(std::distance(num.begin(), iterable));
@@ -67,5 +69,31 @@ public:
         }
 
         std::cout << "]";
+    }
+
+    // Comprueba que la permutacion cumpla los siguiente requisitos: todos los valores estan entre 0 y n-1, y que no haya valores repetidos 
+    static bool PermutacioonValida(const std::vector<int>& perm){
+        int n = static_cast<int>(perm.size());
+
+        std::vector<bool> valid(n, false); // Vector para saber si el elemento ha sido 'visto' en la permutacion
+
+        for(int i = 0; i < perm.size(); i++){
+            int val = perm[i];
+
+            // Comprobamos que el valor buscado este en el rango y que no haya sido 'visto'
+            if(val < 0 || val >= n || valid[val]) return false;
+            
+            // Marcamos como visto
+            valid[val] = true;
+        }
+
+        return true;
+    }
+
+    // Para generar la permutacion identidad
+    static std::vector<int> generar_perm_identidad(int n){
+        std::vector<int> perm(n);
+        for(int i = 0; i < n; i++) perm[i] = i;
+        return perm;
     }
 };
