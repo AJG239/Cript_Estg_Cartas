@@ -2,10 +2,5 @@
 #include "prueba.cpp"
 
 int main(){
-    carga_cache();
-
-    numero_a_factoradico();
-    factoradico_a_numero();
-    numero_permutacion();
-    permutacion_a_numero();
+    probar_transformer();
 }

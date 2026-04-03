@@ -3,6 +3,7 @@
 #include "../include/LargeNumber.h"
 #include "../include/Factoradico.h"
 #include "../include/Permutacion_Lehmer.h"
+#include "../include/Transformer.h"
 
 void constructore_prueba() {
     std::cout << "Prueba de Constructores" << std::endl;
@@ -177,4 +178,14 @@ void permutacion_a_numero(){
     std::vector<int> p17 = {0, 3, 4, 2, 1};
     LargeNumber dec_p17 = Permutacion_Lehmer::PermutacionANumero(p17);
     std::cout << "[0,3,4,2,1] -> " << dec_p17 << std::endl;
+}
+
+void probar_transformer(){
+    std::cout << "Indice de h: " << Transformer::caracterAIndice('h') << std::endl;
+
+    std::cout << "Caracter 23: " << Transformer::indiceACaracter(23) << std::endl;
+
+    std::cout << "Comprobacion de texto con palabra (lince): " << Transformer::texto_valido("lince") << std::endl;
+
+    std::cout << "Limpieza de texto (Me GusTan LAS RosQuilLas.): " << Transformer::limpiar_texto("Me GusTan LAS RosQuilLas.") << std::endl;
 }
