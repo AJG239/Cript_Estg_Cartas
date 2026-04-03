@@ -188,4 +188,7 @@ void probar_transformer(){
     std::cout << "Comprobacion de texto con palabra (lince): " << Transformer::texto_valido("lince") << std::endl;
 
     std::cout << "Limpieza de texto (Me GusTan LAS RosQuilLas.): " << Transformer::limpiar_texto("Me GusTan LAS RosQuilLas.") << std::endl;
+
+    LargeNumber num_hello = Transformer::textoALargeNumber("Buenas Tardes");
+    std::cout << "'Buenas Tardes' -> " << num_hello << std::endl;
 }

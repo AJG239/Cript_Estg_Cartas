@@ -50,6 +50,43 @@ class Transformer{
             return caracteres[indice];
         }
 
+        /*
+            El objetivo es transformar el texto dado a un conjunto de LargeNumbers de 255 bits.
+            Cada carácter se codificará en 5 bits. Y el texto se rellena hasta 45 caracteres.
+        */
+        static LargeNumber textoALargeNumber(const std::string& texto){
+            if(texto.size() > max_caracteres){
+                std::cout << "Error: el texto excede el máximo número de caracteres " << max_caracteres << std::endl;
+                return LargeNumber(0);
+            }
+
+            std::bitset<225> bit_text(0); // No queremos que tenga nada
+
+            for(size_t i = 0; i < texto.size(); i++){
+                bit_text <<= bits_por_caracter; // Se realiza un desplazamiento lateral izquierdo para el texto
+                int indice = caracterAIndice(texto[i]); // Transformamos cada caracter a su índice
+                bit_text |= std::bitset<225>(indice); // Concatenamos el índice al bit_text
+            }
+
+            // Rellenamos la cantidad de ceros necesarios para que tenga un tamaño de 45
+            bit_text <<= (bits_por_caracter * (max_caracteres - texto.size()));
+
+            // Ahora que tenemos el bitset tenemos que convertirlo a un conjunto de LargeNumbers divididos en 64 bits
+            std::vector<uint64_t> largeNumber_text(4, 0);
+
+            for(int i = 0; i < bits_totales; i++){
+                int indice_palabra = i / 64; // En que palabra cae este bit
+                int indice_bit = i % 64; // En que posición esta la palabra
+
+                // Si existe un valor en el texto concatena el índice del bit en la posición de la palabra
+                if(bit_text[i]){
+                    largeNumber_text[indice_palabra] |= static_cast<uint64_t>(1) << indice_bit;
+                }
+            }
+
+            return LargeNumber(largeNumber_text.data(), largeNumber_text.data() + largeNumber_text.size());
+        }
+
         // Función auxiliar para comprobar si el texto es válido, es una comprobación de que noo haya carácteres inválidos
         static bool texto_valido(const std::string& text) {
             std::string caracteres = obtenerCaracteres(); // Pedimos los carácteres para poder trabajr
