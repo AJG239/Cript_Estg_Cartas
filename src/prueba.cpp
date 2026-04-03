@@ -171,3 +171,10 @@ void numero_permutacion(){
     Permutacion_Lehmer::printPermutation(permLast);
     std::cout << std::endl;
 }
+
+
+void permutacion_a_numero(){
+    std::vector<int> p17 = {0, 3, 4, 2, 1};
+    LargeNumber dec_p17 = Permutacion_Lehmer::PermutacionANumero(p17);
+    std::cout << "[0,3,4,2,1] -> " << dec_p17 << std::endl;
+}

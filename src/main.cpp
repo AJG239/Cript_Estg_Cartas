@@ -7,4 +7,5 @@ int main(){
     numero_a_factoradico();
     factoradico_a_numero();
     numero_permutacion();
+    permutacion_a_numero();
 }

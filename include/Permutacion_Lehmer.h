@@ -33,6 +33,31 @@ public:
         return permutacion;
     }
 
+    /*
+
+    */
+    static LargeNumber PermutacionANumero(const std::vector<int>& perm){
+        int size = static_cast<int>(perm.size()); // Tamaño del vectore de la permutación
+        std::vector<LargeNumber> code_lehmer; // Para poder ordenar los valores necesitamos un vector de LargeNumber
+
+        std::vector<int> num; // Lista para saber los número que hay disponibles
+        for(int i = 0; i < size; i++) num.push_back(i);
+
+        // Calcular el códgio Lehmer, buscamos para cada elemento de la permutación su posición de entre los quedan disponibles
+        for (int val : perm){
+            // Buscamos en donde esta el valor dentro de num, nos permite instanciar el tipo como double o int.
+            auto iterable = std::find(num.begin(), num.end(), val); 
+            int index = static_cast<int>(std::distance(num.begin(), iterable));
+
+            // El índice del valor extraido es el dígito del código Lehmer
+            code_lehmer.push_back(LargeNumber(index));
+            // Eliminamos el elemento, para que no existan dublicados.
+            num.erase(iterable);
+        }
+
+        return Factoradico::FactoradicoANumero(code_lehmer);
+    }
+
     static void printPermutation(const std::vector<int>& perm){
         std::cout << "[";
 
