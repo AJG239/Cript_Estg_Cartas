@@ -172,6 +172,11 @@ void numero_permutacion(){
     std::cout << "46 con 5 elementos: ";
     Permutacion_Lehmer::printPermutation(permLast);
     std::cout << std::endl;
+
+    std::vector<int> permLast_2 = Permutacion_Lehmer::NumeroAPermutacion(LargeNumber(239), 6);
+    std::cout << "23 con 4 elementos: ";
+    Permutacion_Lehmer::printPermutation(permLast_2);
+    std::cout << std::endl;
 }
 
 

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "prueba.cpp"
+#include "../prueba.cpp"
 
 int main(){
     probar_baraja();
