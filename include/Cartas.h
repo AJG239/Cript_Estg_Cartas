@@ -3,6 +3,7 @@
 #include "LargeNumber.h"
 #include "Permutacion_Lehmer.h"
 #include "Transformer.h"
+#include "Cifrados.h"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -35,10 +36,13 @@ class Cartas{
             return identidad;
         }
 
-        static std::array<int, baraja> codificar(const std::string& text, const std::string& palabra = "none", const std::string& clave){
+        static std::array<int, baraja> codificar(const std::string& text, const std::string& cifrado = "none", const std::string& clave){
             std::string texto_limipo = Transformer::limpiar_texto(text);
 
             LargeNumber text_numero = Transformer::textoALargeNumber(texto_limipo);
+
+            auto texto_cifrado = CifradoFactory::create(cifrado);
+            text_numero = texto_cifrado->cifrado(text_numero, clave);
 
             std::vector<int> numero_permutacion = Permutacion_Lehmer::NumeroAPermutacion(text_numero, baraja);
 
@@ -50,12 +54,15 @@ class Cartas{
             return texto_codificado;
         }
 
-        static std::string decodificar(const std::array<int, baraja>& texto_codificado){
+        static std::string decodificar(const std::array<int, baraja>& texto_codificado, const std::string& cifrado = "none", const std::string& clave){
             std::vector<int> permutacion(texto_codificado.begin(), texto_codificado.end());
 
             if(!Permutacion_Lehmer::PermutacioonValida(permutacion)) return "Error: la baraja no es una permutacion valida";
 
             LargeNumber permutacion_numero = Permutacion_Lehmer::PermutacionANumero(permutacion);
+
+            auto texto_cifrado = CifradoFactory::create(cifrado);
+            permutacion_numero = texto_cifrado->descifrado(permutacion_numero, clave);
 
             std::string numero_texto = Transformer::LargeNumberATexto(permutacion_numero);
 

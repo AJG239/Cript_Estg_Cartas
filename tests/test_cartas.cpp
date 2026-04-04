@@ -17,15 +17,15 @@ int test_cartas(){
     check("carta 51 = K de Treboles", Cartas::nombreCarta(51) == "K de Treboles");
 
     // Codificar/decodificar
-    auto probar = [&](const std::string& msg) {
-        auto baraja = Cartas::codificar(msg);
-        std::string decoded = Cartas::decodificar(baraja);
+    auto probar = [&](const std::string& msg, const std::string& tipo, const std::string& clave) {
+        auto baraja = Cartas::codificar(msg, tipo, clave);
+        std::string decoded = Cartas::decodificar(baraja, tipo, clave);
         return decoded.substr(0, msg.size()) == msg;
     };
 
-    check("hello world", probar("hello world"));
-    check("una letra", probar("a"));
-    check("max 45 chars", probar("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrs"));
+    check("hello world", probar("hello world", "none", ""));
+    check("una letra", probar("a", "none", ""));
+    check("max 45 chars", probar("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrs", "none", ""));
 
     // Permutación válida
     auto baraja = Cartas::codificar("test");
