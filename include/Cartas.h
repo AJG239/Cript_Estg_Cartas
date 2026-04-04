@@ -72,4 +72,41 @@ class Cartas{
 
             return texto;
         }
+
+        // Transformar los índices de la baraja en un string para luego exportarlo a CSV
+        static std::string carta_a_CSV(const std::array<int,baraja>& texto_baraja){
+            std::string texto;
+
+            for(int i = 0; i < baraja; i++){
+                if(i > 0){ texto += ','; texto += std::to_string(texto_baraja[i]);}
+                else texto += std::to_string(texto_baraja[i]);
+            }
+
+            return texto;
+        }
+
+        // Parsear un conjunto de índices de un csv a un array de cartas
+        static std::array<int, baraja> CSV_a_baraja(const std::string& csv){
+            std::array<int, baraja> texto_baraja;
+            std::istringstream ss(csv); // Gracias a istringstream podemos leer el string como si fuera un flujo de datos, lo que nos permite usar getline para separar por comas
+            std::string token;
+            int i = 0;
+
+            while(std::getline(ss, token, ',') && i < baraja){
+                try{
+                    texto_baraja[i] = std::stoi(token);
+                } catch (const std::invalid_argument& e){
+                    std::cerr << "Error: token '" << token << "' no es un número válido." << std::endl;
+                    return BarajaIdentidad(); // Devuelve la baraja identidad en caso de error
+                }
+                i++;
+            }
+
+            if(i != baraja){
+                std::cerr << "Error: se esperaban " << baraja << " cartas, pero se encontraron " << i << "." << std::endl;
+                return BarajaIdentidad(); // Devuelve la baraja identidad en caso de error
+            }
+
+            return texto_baraja;
+        }
 };
