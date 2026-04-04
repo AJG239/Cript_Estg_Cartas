@@ -2,5 +2,5 @@
 #include "../prueba.cpp"
 
 int main(){
-    probar_baraja();
+    probar_transformer();
 }

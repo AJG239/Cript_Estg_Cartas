@@ -195,7 +195,7 @@ void probar_transformer(){
 
     std::cout << "Limpieza de texto (Me GusTan LAS RosQuilLas.): " << Transformer::limpiar_texto("Me GusTan LAS RosQuilLas.") << std::endl;
 
-    LargeNumber num_hello = Transformer::textoALargeNumber("Buenas Tardes");
+    LargeNumber num_hello = Transformer::textoALargeNumber("Este 123 texto ES de PrUeBa./");
     std::cout << "'Buenas Tardes' -> " << num_hello << std::endl;
 
     std::string decode = Transformer::LargeNumberATexto(num_hello);
