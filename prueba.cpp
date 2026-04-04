@@ -1,10 +1,10 @@
 #pragma once
 #include <iostream>
-#include "../include/LargeNumber.h"
-#include "../include/Factoradico.h"
-#include "../include/Permutacion_Lehmer.h"
-#include "../include/Transformer.h"
-#include "../include/Cartas.h"
+#include "include/LargeNumber.h"
+#include "include/Factoradico.h"
+#include "include/Permutacion_Lehmer.h"
+#include "include/Transformer.h"
+#include "include/Cartas.h"
 
 void constructore_prueba() {
     std::cout << "Prueba de Constructores" << std::endl;
