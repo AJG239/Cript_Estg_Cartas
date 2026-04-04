@@ -46,18 +46,46 @@ class SinCifrado : public Cifrados {
 };
 
 /*
+    XORCipher — Cifrado XOR bit a bit
+    XOR es una operación lógica que compara dos bits:
+     0 XOR 0 = 0 ; 0 XOR 1 = 1 ; 1 XOR 0 = 1 ; 1 XOR 1 = 0
+
+    Propiedad clave: aplicar XOR dos veces con la misma clave devuelve el valor original (es involutivo).
+    mensaje XOR clave = cifrado ; cifrado XOR clave = mensaje
+    Por eso cifrar y descifrar son la misma operación. Es el método original del proyecto DeckCrypt (Falcon).
+*/
+
+class XORCifrado : public Cifrados {
+    public:
+        std::string nombre() const override { return "xor";}
+        bool clave() const override { return true; }
+
+        LargeNumber cifrado(const LargeNumber& a, const std::string& key) const override {
+            if(key.empty()) return a;
+            LargeNumber keyNum = Transformer::textoALargeNumber(Transformer::limpiar_texto(key));
+            return Transformer::xorLargeNumbers(a, keyNum);
+        }
+        
+        LargeNumber descifrado(const LargeNumber& a, const std::string& key) const override {
+            // XOR es simétrico: descifrar = cifrar de nuevo
+            return cifrado(a, key);
+        }
+};
+
+/*
     Factory que nos permite generar un método de cifrado dependiendo del tipo que necesitemos en determinado momento.
     Gracias a unique_ptr podemos generar la clase sin necesidad de instaciarlo con new y delete. De esta forma cuando cumpla 
     su función se eliminará y no tendremos fugas de memoria.
 */
 class CifradoFactory {
     public: 
-        static std::unique_ptr<Cifrados> create(const std::string& name){
+        static std::unique_ptr<Cifrados> create(const std::string& name) {
             if (name == "none") return std::make_unique<SinCifrado>();
+            if (name == "xor") return std::make_unique<XORCifrado>();
             throw std::invalid_argument("Cifrado desconocido: " + name);
         }
 
         static std::vector<std::string> tipos_de_cifrado(){
-            return {"none"};
+            return {"none", "xor"};
         }
 };

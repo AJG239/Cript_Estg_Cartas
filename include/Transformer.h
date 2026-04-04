@@ -136,4 +136,19 @@ class Transformer{
 
             return text_limpio;
         }
+
+        // Función que compara entre dos textos codificados como LargeNumber
+        static LargeNumber xorLargeNumbers(const LargeNumber& a, const LargeNumber& b){
+                // Comprobamos el tamaño de ambos vectores para asegurar que tengamos espacio suficiente
+                size_t size_a = a.size(), size_b = b.size(), size_max = std::max(size_a, size_b);
+                LargeNumber result(size_max, 0); // Creamos un LargeNumber resultado con el tamaño máximo y con valor 0
+    
+                for(size_t i = 0; i < size_max; i++){
+                    uint64_t word_a = (i < size_a) ? a[i] : 0; // Si i es menor que el tamaño de a, cogemos su valor, sino 0
+                    uint64_t word_b = (i < size_b) ? b[i] : 0; // Si i es menor que el tamaño de b, cogemos su valor, sino 0
+                    result[i] = word_a ^ word_b; // Aplicamos XOR bit a bit entre las palabras correspondientes
+                }
+    
+                return result.truncate(); // Devolvemos el resultado truncado para eliminar ceros innecesarios
+        }
 };
