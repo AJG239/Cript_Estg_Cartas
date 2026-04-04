@@ -200,4 +200,13 @@ void probar_transformer(){
 void probar_baraja(){
     std::cout << "Carta con indice 2: " << Cartas::nombreCarta(2) << std::endl;
     std::cout << "Carta con indice 23: " << Cartas::nombreCarta(23) << std::endl;
+
+    std::cout << "Prueba completa codificado y decodificado (La baraja de cartas tiene cuatro palos.)" << std::endl;
+    auto texto_codificado = Cartas::codificar("La baraja de cartas tiene cuatro palos.");
+
+    std::cout << "Texto codificado: " << Cartas::barajaATecto(texto_codificado) << std::endl;
+    auto texto_decodificado = Cartas::decodificar(texto_codificado);
+
+    std::cout << "Texto decodificado: " << texto_decodificado << std::endl;
+
 }
