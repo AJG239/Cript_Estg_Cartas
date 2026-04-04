@@ -4,6 +4,7 @@
 #include "../include/Factoradico.h"
 #include "../include/Permutacion_Lehmer.h"
 #include "../include/Transformer.h"
+#include "../include/Cartas.h"
 
 void constructore_prueba() {
     std::cout << "Prueba de Constructores" << std::endl;
@@ -194,4 +195,9 @@ void probar_transformer(){
 
     std::string decode = Transformer::LargeNumberATexto(num_hello);
     std::cout << "Texto: " << decode << std::endl;
+}
+
+void probar_baraja(){
+    std::cout << "Carta con indice 2: " << Cartas::nombreCarta(2) << std::endl;
+    std::cout << "Carta con indice 23: " << Cartas::nombreCarta(23) << std::endl;
 }
