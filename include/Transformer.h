@@ -87,6 +87,23 @@ class Transformer{
             return LargeNumber(largeNumber_text.data(), largeNumber_text.data() + largeNumber_text.size());
         }
 
+        // Converitr un largeNumber de 225 bits a texto
+        static std::string LargeNumberATexto(LargeNumber num){
+            std::string texto;
+
+            for(int i = 0; i < max_caracteres; i++){
+                    LargeNumber cociente, resto; // El resto es el índice del último carácter
+                    LargeNumber::divMod(num, LargeNumber(tamano_afabeto), cociente, resto);
+
+                    int indice = static_cast<int>(resto.toDouble()); // Hacemos un toDouble porque hay que transformar el LargeNumber a un entero
+                    texto = indiceACaracter(indice) + texto;
+
+                    num = cociente;
+            }
+
+            return texto;
+        }
+
         // Función auxiliar para comprobar si el texto es válido, es una comprobación de que noo haya carácteres inválidos
         static bool texto_valido(const std::string& text) {
             std::string caracteres = obtenerCaracteres(); // Pedimos los carácteres para poder trabajr

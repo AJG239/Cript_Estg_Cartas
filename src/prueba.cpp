@@ -191,4 +191,7 @@ void probar_transformer(){
 
     LargeNumber num_hello = Transformer::textoALargeNumber("Buenas Tardes");
     std::cout << "'Buenas Tardes' -> " << num_hello << std::endl;
+
+    std::string decode = Transformer::LargeNumberATexto(num_hello);
+    std::cout << "Texto: " << decode << std::endl;
 }
