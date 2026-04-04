@@ -35,7 +35,7 @@ class Cartas{
             return identidad;
         }
 
-        static std::array<int, baraja> codificar(const std::string& text){
+        static std::array<int, baraja> codificar(const std::string& text, const std::string& palabra = "none", const std::string& clave){
             std::string texto_limipo = Transformer::limpiar_texto(text);
 
             LargeNumber text_numero = Transformer::textoALargeNumber(texto_limipo);
