@@ -423,5 +423,6 @@ class LargeNumber{
 
         LargeNumber operator>>(size_t n) const { return LargeNumber(*this) >>= n;}
         LargeNumber operator<<(size_t n) const { return LargeNumber(*this) <<= n;}
+        LargeNumber& operator=(const LargeNumber& a) { words = a.words; neg = a.neg; return *this;}
 };
 
