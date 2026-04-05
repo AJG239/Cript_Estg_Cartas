@@ -109,7 +109,7 @@ class Transformer{
             std::string caracteres = obtenerCaracteres(); // Pedimos los carácteres para poder trabajr
             
             // Comprobamos para carácter en minúscula que existe dentro de nuestros caráctere permitidos
-            for(int i = 0; i < text.size(); i++){
+            for(size_t i = 0; i < text.size(); i++){
                 char c = text[i];
                 if(caracteres.find(std::tolower(c)) == std::string::npos) return false;
             }
@@ -123,7 +123,7 @@ class Transformer{
             std::string text_limpio; // Texto que utilizaremos para realizar todo el procesado
 
             // Añadimos cada carácter en minúscula que pertenezca a nuestro string al texto_limpio
-            for(int i = 0; i < text.size(); i++){
+            for(size_t i = 0; i < text.size(); i++){
                 char lower = std::tolower(text[i]); 
 
                 if(caracteres.find(lower) != std::string::npos) text_limpio += lower;

@@ -45,7 +45,7 @@ public:
         for(int i = 0; i < size; i++) num.push_back(i);
 
         // Calcular el códgio Lehmer, buscamos para cada elemento de la permutación su posición de entre los quedan disponibles
-        for (int i = 0; i < perm.size(); i++){
+        for (size_t i = 0; i < perm.size(); i++){
             int val = perm[i];
             // Buscamos en donde esta el valor dentro de num, nos permite instanciar el tipo como double o int.
             auto iterable = std::find(num.begin(), num.end(), val); 
@@ -63,7 +63,7 @@ public:
     static void printPermutation(const std::vector<int>& perm){
         std::cout << "[";
 
-        for(int i = 0; i < perm.size(); i++){
+        for(size_t i = 0; i < perm.size(); i++){
             if(i > 0) std::cout << ",";
             std::cout << perm[i];
         }
@@ -77,7 +77,7 @@ public:
 
         std::vector<bool> valid(n, false); // Vector para saber si el elemento ha sido 'visto' en la permutacion
 
-        for(int i = 0; i < perm.size(); i++){
+        for(size_t i = 0; i < perm.size(); i++){
             int val = perm[i];
 
             // Comprobamos que el valor buscado este en el rango y que no haya sido 'visto'
