@@ -9,4 +9,6 @@ int test_cifrado(){
         if(condicion){passed++;}
         else{std::cout << " [Error] " << nombre << std::endl; failed++;}
     };
+
+    return failed;
 }

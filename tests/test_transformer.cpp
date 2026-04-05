@@ -32,4 +32,6 @@ int test_transformer(){
     check("limpiar texto", texto == "este  texto es de prueba./");
     check("numero no es cero", texto_numero.size() > 0);
     check("ida y vuelta", numero_texto.substr(0, texto.size()) == texto);
+
+    return failed;
 }

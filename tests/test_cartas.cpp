@@ -11,10 +11,10 @@ int test_cartas(){
     };
 
     // Nombres de cartas
-    check("carta 0 = AS de picas", Cartas::nombreCarta(0) == "AS de picas");
-    check("carta 12 = K de Picas", Cartas::nombreCarta(12) == "K de Picas");
-    check("carta 13 = AS de Corazones", Cartas::nombreCarta(13) == "AS de Corazones");
-    check("carta 51 = K de Treboles", Cartas::nombreCarta(51) == "K de Treboles");
+    check("carta 0 = AS de Picas", Cartas::nombreCarta(0) == "AS de Picas negra");
+    check("carta 12 = K de Picas", Cartas::nombreCarta(12) == "K de Picas negra");
+    check("carta 13 = AS de Corazones", Cartas::nombreCarta(13) == "AS de Corazones roja");
+    check("carta 51 = K de Treboles", Cartas::nombreCarta(51) == "K de Treboles negra");
 
     // Codificar/decodificar
     auto probar = [&](const std::string& msg, const std::string& tipo, const std::string& clave) {
@@ -31,4 +31,6 @@ int test_cartas(){
     auto baraja = Cartas::codificar("test");
     std::vector<int> perm(baraja.begin(), baraja.end());
     check("permutacion valida", Permutacion_Lehmer::PermutacioonValida(perm));   
+
+    return failed;
 }

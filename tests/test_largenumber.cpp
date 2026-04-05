@@ -12,7 +12,7 @@ int test_largenumber(){
 
     check("Constructor vacío", LargeNumber().size() == 0);
     check("Constructor int posiitvo", LargeNumber(23)[0] == 23);
-    check("Constructor int negativo", LargeNumber(-9)[0] == -9);
+    check("Constructor int negativo", LargeNumber(-9)[0] == 9 && LargeNumber(-9).neg == true);
 
     // Suma con acarreo simple
     LargeNumber suma = LargeNumber::addUnsigned(LargeNumber(127), LargeNumber(581)); 
@@ -30,7 +30,7 @@ int test_largenumber(){
 
     // Resta
     LargeNumber resta = LargeNumber::subUnsigned(LargeNumber(439), LargeNumber(327));
-    check("439 - 327 = 112", resta[0] == 127);
+    check("439 - 327 = 112", resta[0] == 112);
 
     // Multiplicación
     LargeNumber multiplicacion = LargeNumber::mulLong(LargeNumber(98765), LargeNumber(43211));

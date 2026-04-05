@@ -20,13 +20,15 @@ int test_permutation_lehmer(){
     // Permutación a número
     auto perm17 = {0,3,4,2,1};
     LargeNumber num_perm17 = Permutacion_Lehmer::PermutacionANumero(perm17);
-    check("{0,3,4,2,1} = 17", LargeNumber::comparar_numeros(num_perm17, LargeNumber(17)));
+    check("{0,3,4,2,1} = 17", LargeNumber::comparar_numeros(num_perm17, LargeNumber(17)) == 0);
 
     auto perm239 = {1,5,4,3,2,0};
     LargeNumber num_perm239 = Permutacion_Lehmer::PermutacionANumero(perm239);
-    check("{1,5,4,3,2,0} = 239", LargeNumber::comparar_numeros(num_perm239, LargeNumber(239)));
+    check("{1,5,4,3,2,0} = 239", LargeNumber::comparar_numeros(num_perm239, LargeNumber(239)) == 0);
 
     // Comprobar permutación
     check("[2,0,3,1] valida", Permutacion_Lehmer::PermutacioonValida({2,0,3,1}));
     check("[1,0,1,3] invalida", !Permutacion_Lehmer::PermutacioonValida({1,0,1,3}));
+
+    return failed;
 }
