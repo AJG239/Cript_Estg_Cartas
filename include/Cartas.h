@@ -18,7 +18,7 @@ class Cartas{
             if (indice < 0 || indice >= baraja) return "Error";
 
             static const std::string palos[] = {"Picas", "Corazones", "Rombos", "Treboles"};
-            static const std::string numeros[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+            static const std::string numeros[] = {"AS", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
 
             int palo = indice / 13; // 0-12 --> picas, 13-25 --> Corazones, 26-38 Rombos, 38-51 Treboles
             int num = indice % 13; // Número dentro del palo
@@ -36,7 +36,7 @@ class Cartas{
             return identidad;
         }
 
-        static std::array<int, baraja> codificar(const std::string& text, const std::string& cifrado = "none", const std::string& clave){
+        static std::array<int, baraja> codificar(const std::string& text, const std::string& cifrado = "none", const std::string& clave=""){
             std::string texto_limipo = Transformer::limpiar_texto(text);
 
             LargeNumber text_numero = Transformer::textoALargeNumber(texto_limipo);
@@ -54,7 +54,7 @@ class Cartas{
             return texto_codificado;
         }
 
-        static std::string decodificar(const std::array<int, baraja>& texto_codificado, const std::string& cifrado = "none", const std::string& clave){
+        static std::string decodificar(const std::array<int, baraja>& texto_codificado, const std::string& cifrado = "none", const std::string& clave=""){
             std::vector<int> permutacion(texto_codificado.begin(), texto_codificado.end());
 
             if(!Permutacion_Lehmer::PermutacioonValida(permutacion)) return "Error: la baraja no es una permutacion valida";
