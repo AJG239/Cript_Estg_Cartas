@@ -54,7 +54,7 @@ class Exporter{
         static std::string caracteres_especiales_JSON(const std::string& a){
             std::string caracter_especial;
 
-            for(int i = 0; i < a.size(); i++){
+            for(size_t i = 0; i < a.size(); i++){
                 char caract = a[i];
                 switch(caract){
                     case '"': caracter_especial += "\\\""; break;
@@ -64,5 +64,7 @@ class Exporter{
                     default: caracter_especial += caract;
                 }
             }
+
+            return caracter_especial;
         }
 };
