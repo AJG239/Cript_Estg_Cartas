@@ -73,6 +73,55 @@ class XORCifrado : public Cifrados {
 };
 
 /*
+    DesplazamientoCifrado --> A diferencia de los desplazamientos normales que mueven una cantidad
+    de letras en el orden que se le indica. Aquí desplazamos nuestros 225 bits sumandole la clave dada.
+    En caso de que se exceda, se calcula en módulo de 52! para obtener el valor a esconder.
+*/
+
+class DesplazamientoCifrado : public Cifrados {
+    public:
+        std::string nombre() const override {return "desplazamiento";}
+        bool clave() const override {return true;}
+
+        LargeNumber cifrado(const LargeNumber& a, const std::string& key) const override {
+            if(key.empty()) return a;
+
+            LargeNumber keyNum = Transformer::textoALargeNumber(Transformer::limpiar_texto(key));
+
+            // Para no salirnose del rango permitido, tomaremos 52! como el módulo
+            LargeNumber modulo = Factoradico::factorial(52);
+
+            // Sumamos ambos elementos para generar el desplazamiento
+            LargeNumber result = LargeNumber::addUnsigned(a, keyNum);
+
+            // Debemos comprobar que no se pase de 52!, si se pasa calculamos el resto 
+            if (LargeNumber::comparar_numeros(result, modulo) >= 0){
+                LargeNumber cociente, resto;
+                LargeNumber::divMod(result, modulo, cociente, resto);
+                result = resto;
+            }
+            
+            return result;
+        }
+        
+        LargeNumber descifrado(const LargeNumber& a, const std::string& key) const override {
+            if(key.empty()) return a;
+
+            LargeNumber keyNum = Transformer::textoALargeNumber(Transformer::limpiar_texto(key));
+            LargeNumber modulo = Factoradico::factorial(52);
+
+            // Existen dos casos que a >= key, se resta de forma directa. Si a < key, significa que hemos encontrado el resto por lo que necesitamos recalcularla
+            if (LargeNumber::comparar_numeros(a, keyNum) >= 0){
+                return LargeNumber::subUnsigned(a, keyNum); 
+            } else{
+                // Calculamos la diferencia existente entre los valores dados y luego se lo quitamos al módulo para encontrar el verdadero valor que estamos buscando
+                LargeNumber diferencia = LargeNumber::subUnsigned(keyNum, a);
+                return LargeNumber::subUnsigned(modulo, diferencia);
+            }
+        }
+};
+
+/*
     Factory que nos permite generar un método de cifrado dependiendo del tipo que necesitemos en determinado momento.
     Gracias a unique_ptr podemos generar la clase sin necesidad de instaciarlo con new y delete. De esta forma cuando cumpla 
     su función se eliminará y no tendremos fugas de memoria.
@@ -82,10 +131,11 @@ class CifradoFactory {
         static std::unique_ptr<Cifrados> create(const std::string& name) {
             if (name == "none") return std::make_unique<SinCifrado>();
             if (name == "xor") return std::make_unique<XORCifrado>();
+            if (name == "desplazamiento") return std::make_unique<DesplazamientoCifrado>();
             throw std::invalid_argument("Cifrado desconocido: " + name);
         }
 
         static std::vector<std::string> tipos_de_cifrado(){
-            return {"none", "xor"};
+            return {"none", "xor", "desplazamiento"};
         }
 };
