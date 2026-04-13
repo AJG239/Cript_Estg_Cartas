@@ -122,4 +122,76 @@ class Exporter{
 
             return json.substr(comilla1 + 1, comilla2 - comilla1 - 1); // Extraer lo de entre comillas   
         }
+
+        /*
+            Escribe un archivo BMP completo. Un archivo BMP esta formado por una cabecera BMP de 14 bytes, una cabecera DIB de 40 bytes
+            y el resto formado por los pixeles de las cartas.
+
+            Importante que el formato de color de un BitMap no es RGB de BGR.
+        */
+        static bool generar_bitmap(const std::string& ruta, int ancho, int alto, const std::vector<uint8_t>& pixels){
+            // Un bitmap establece que las imagenes deben ser múltiplos de 4, por lo que redondeamos el tamaño de bits a un múltiplo de 4
+            int tam_fila = ((ancho * 3 + 3) / 4) * 4;
+            int tam_imagen = tam_fila * alto; // Tamaño total de la imagen (dimensión total)
+            int tam_fichero = 54 + tam_imagen;  // Tamaño total del bitmap --> sumamos 54 por la cabecera (14 bits = BitMap + tamaño + offset) y cabecera DIB (40 bits =  dimensiones + formato) 
+
+            std::ofstream archivo(ruta, std::ios::binary);
+            if (!archivo.is_open()) return false;
+
+            // Cabecera BMP
+            uint8_t cabecera_BMP[14] = {};
+            
+            cabecera_BMP[0] = 'B';
+            cabecera_BMP[1] = 'M';
+
+            escrbirLeenEnding(cabecera_BMP + 2, tam_fichero);
+            escrbirLeenEnding(cabecera_BMP + 10, 54);
+
+            archivo.write(reinterpret_cast<char*>(cabecera_BMP), 14); // Introducción de la cabecera BMP al archivo
+
+            // Cabecera DIB --> información técnica para visualizar la imagen
+            uint8_t cabecera_DIB[40] = {};
+
+            escrbirLeenEnding(cabecera_BMP, 40); // Tamaño de la cabecera
+            escrbirLeenEnding(cabecera_BMP, ancho); // Ancho en píxeles
+            escrbirLeenEnding(cabecera_BMP, alto); // Alto en píxeles
+
+            cabecera_DIB[12] = 1; cabecera_DIB[13] = 0; // Ambos píxeles nos dan los planos de color
+            cabecera_DIB[14] = 24; cabecera_DIB[15] = 0; // 3 Bytes por pixel formato BGR
+
+            escrbirLeenEnding(cabecera_BMP + 20, tam_imagen);
+
+            archivo.write(reinterpret_cast<char*>(cabecera_DIB), 40);
+
+            /*
+                Datos de cada pixel, cada fila tiene 8 bits disponibles y se escribe de abajo a arriba la imagen
+            */
+
+            std::vector<uint8_t> fila(tam_fila, 0);
+
+            for(int i = alto - 1; i >= 0; i--){
+                for(int j = 0; j < ancho; i++){
+                    int indice = (i * ancho + j) * 3;
+                    fila[j * 3] = pixels[indice];
+                    fila[j * 3 + 1] = pixels[indice + 1];
+                    fila [j * 3 + 2] = pixels[indice + 2];
+                }
+
+                archivo.write(reinterpret_cast<char*>(fila.data()), tam_fila);
+            }
+
+            archivo.close();
+            return true;
+        }
+
+        /*
+            Escribe un entere de 32 bitsen formato little-endian (bytes bajo primero), BMP exige este formato para todos
+            los número de la cabecera.
+        */
+        static void escrbirLeenEnding(uint8_t* buffer, uint32_t val){
+            buffer[0] = val & 0xFF; // Los 8 bytes más bajos    
+            buffer[1] = (val >> 8) & 0xFF;
+            buffer[2] = (val >> 16) & 0xFF;
+            buffer[3] = (val >> 24) & 0xFF;
+        }
 };
