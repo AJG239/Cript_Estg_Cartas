@@ -85,6 +85,70 @@ class Exporter{
 
         }
 
+        static bool guardarBMP(const std::array<int, 52>& baraja, const std::string& ruta) {
+            // ── Dimensiones ──
+            const int ancho_por_carta = 40, alto_por_carta = 56; // Alto y ancho de cada carta
+            const int filas = 4, columnas = 13; // Filas x Columnas de la imagen
+            const int padding = 4; // Espacio entre cartas en píxeles
+
+            // Ancho total: padding izquierdo + 13 × (carta + padding)
+            const int ancho = columnas * (ancho_por_carta + padding) + padding;
+
+            // Alto total: padding superior + 4 × (carta + padding)
+            const int alto  = filas * (alto_por_carta + padding) + padding;
+
+            // Buffer de pixeles --> BGR
+            std::vector<uint8_t> pixeles(ancho * alto * 3, 30);
+
+            // Colores de los pixeles --> BGR
+            struct Color { uint8_t b, g, r; };
+            Color coloresPalo[2] = {
+                {100, 100, 100},   // Picas y tréboles --> gris
+                {80,  80,  220},   // Corazones y Diamantes --> rojo
+            };
+
+            for(int i = 0; i < 52; i++){
+                int indice_cartas = baraja[i], palo = indice_cartas / 13, numero = indice_cartas % 13;
+
+                int f = i / columnas, col = i % columnas;
+
+                int pos_x = padding + col * (ancho_por_carta + padding);
+                int pos_y = padding + f * (alto_por_carta + padding);
+
+                // Color base del palo
+                Color palo_carta = coloresPalo[palo];
+
+                // Pintar cada píxel del rectángulo de la carta
+                for (int y = 0; y < alto_por_carta; y++) {
+                    for (int x = 0; x < ancho_por_carta; x++) {
+                        // Posición absoluta en la imagen
+                        int pixel_x = pos_x + x;
+                        int pixel_y = pos_y + y;
+
+                        // Comprobar si el píxel pertenece al borde
+                        bool borde = (x == 0 || x == ancho_por_carta - 1 || y == 0 || y == alto_por_carta - 1);
+
+                        // Calcular índice en el buffer de píxeles
+                        int index = ((pos_y + y) * ancho + (pos_x + x)) * 3;
+
+                        if (borde) {
+                            // Borde gris 
+                            pixeles[index] = 200;
+                            pixeles[index + 1] = 200;
+                            pixeles[index + 2] = 200;
+                        } else {
+                            // Interior: color del palo
+                            pixeles[index] = palo_carta.b;
+                            pixeles[index + 1] = palo_carta.g;
+                            pixeles[index + 2] = palo_carta.r;
+                        }
+                    }
+                }
+            }
+
+            return generar_bitmap(ruta, ancho, alto, pixeles);
+        }
+
     private:
         /*
             Para poder guardar el archivo comoo un JSON y que la interpretación de carácteres no de error
@@ -152,14 +216,14 @@ class Exporter{
             // Cabecera DIB --> información técnica para visualizar la imagen
             uint8_t cabecera_DIB[40] = {};
 
-            escrbirLeenEnding(cabecera_BMP, 40); // Tamaño de la cabecera
-            escrbirLeenEnding(cabecera_BMP, ancho); // Ancho en píxeles
-            escrbirLeenEnding(cabecera_BMP, alto); // Alto en píxeles
+            escrbirLeenEnding(cabecera_DIB, 40); // Tamaño de la cabecera
+            escrbirLeenEnding(cabecera_DIB + 4, ancho); // Ancho en píxeles
+            escrbirLeenEnding(cabecera_DIB + 8, alto); // Alto en píxeles
 
             cabecera_DIB[12] = 1; cabecera_DIB[13] = 0; // Ambos píxeles nos dan los planos de color
             cabecera_DIB[14] = 24; cabecera_DIB[15] = 0; // 3 Bytes por pixel formato BGR
 
-            escrbirLeenEnding(cabecera_BMP + 20, tam_imagen);
+            escrbirLeenEnding(cabecera_DIB + 20, tam_imagen);
 
             archivo.write(reinterpret_cast<char*>(cabecera_DIB), 40);
 
@@ -170,7 +234,7 @@ class Exporter{
             std::vector<uint8_t> fila(tam_fila, 0);
 
             for(int i = alto - 1; i >= 0; i--){
-                for(int j = 0; j < ancho; i++){
+                for(int j = 0; j < ancho; j++){
                     int indice = (i * ancho + j) * 3;
                     fila[j * 3] = pixels[indice];
                     fila[j * 3 + 1] = pixels[indice + 1];
