@@ -106,7 +106,6 @@ class Exporter{
             for(int i = 0; i < 52; i++){
                 int indice_cartas = baraja[i], palo = indice_cartas / 13, numero = indice_cartas % 13;
 
-
                 int f = i / columnas, col = i % columnas;
 
                 int pos_x = padding + col * (ancho_por_carta + padding);
@@ -136,6 +135,7 @@ class Exporter{
 
                 int find_index = caracter_rango(numero);
                 
+                // 2º Dibujar los números
                 if(numero == 9){
                     dibujarCaracter(pixeles, ancho, pos_x + 3, pos_y + 3, 1, palo_carta.b, palo_carta.g, palo_carta.r);
                     dibujarCaracter(pixeles, ancho, pos_x + 9, pos_y + 3, 0, palo_carta.b, palo_carta.g, palo_carta.r);
@@ -143,6 +143,15 @@ class Exporter{
                     dibujarCaracter(pixeles, ancho, pos_x + 3, pos_y + 3, find_index, palo_carta.b, palo_carta.g, palo_carta.r);
                 }
 
+                if(numero == 9){
+                    dibujarCaracter(pixeles, ancho, pos_x + ancho_por_carta - 8, pos_y + alto_por_carta - 10, 0, palo_carta.b, palo_carta.g, palo_carta.r);
+                    dibujarCaracter(pixeles, ancho, pos_x + ancho_por_carta - 14, pos_y + alto_por_carta - 10, 1, palo_carta.b, palo_carta.g, palo_carta.r);
+                } else{
+                    dibujarCaracter(pixeles, ancho, pos_x + ancho_por_carta - 8, pos_y + alto_por_carta -10, find_index, palo_carta.b, palo_carta.g, palo_carta.r);
+                }
+
+                // 3ª Dibujar el palo
+                dibujarPalo(pixeles, ancho, pos_x + (ancho_por_carta/2) - 4, pos_y + (alto_por_carta/2) - 4, palo, palo_carta.b, palo_carta.g, palo_carta.r);
             }
 
             return generar_bitmap(ruta, ancho, alto, pixeles);
