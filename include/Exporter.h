@@ -102,13 +102,10 @@ class Exporter{
 
             // Colores de los pixeles --> BGR
             struct Color { uint8_t b, g, r; };
-            Color coloresPalo[2] = {
-                {100, 100, 100},   // Picas y tréboles --> gris
-                {80,  80,  220},   // Corazones y Diamantes --> rojo
-            };
 
             for(int i = 0; i < 52; i++){
                 int indice_cartas = baraja[i], palo = indice_cartas / 13, numero = indice_cartas % 13;
+
 
                 int f = i / columnas, col = i % columnas;
 
@@ -116,34 +113,36 @@ class Exporter{
                 int pos_y = padding + f * (alto_por_carta + padding);
 
                 // Color base del palo
-                Color palo_carta = coloresPalo[palo];
+                bool esRoja = (palo == 1 || palo == 2);
+                Color palo_carta = esRoja ? Color{0, 0, 200} : Color{0, 0, 0};
 
-                // Pintar cada píxel del rectángulo de la carta
-                for (int y = 0; y < alto_por_carta; y++) {
-                    for (int x = 0; x < ancho_por_carta; x++) {
-                        // Posición absoluta en la imagen
-                        int pixel_x = pos_x + x;
-                        int pixel_y = pos_y + y;
-
-                        // Comprobar si el píxel pertenece al borde
-                        bool borde = (x == 0 || x == ancho_por_carta - 1 || y == 0 || y == alto_por_carta - 1);
-
-                        // Calcular índice en el buffer de píxeles
-                        int index = ((pos_y + y) * ancho + (pos_x + x)) * 3;
-
-                        if (borde) {
-                            // Borde gris 
-                            pixeles[index] = 200;
-                            pixeles[index + 1] = 200;
-                            pixeles[index + 2] = 200;
-                        } else {
-                            // Interior: color del palo
-                            pixeles[index] = palo_carta.b;
-                            pixeles[index + 1] = palo_carta.g;
-                            pixeles[index + 2] = palo_carta.r;
+                // 1º Pintar la carta 
+                for(int y = 0; y < alto_por_carta; y++){
+                    for(int x = 0; x <ancho_por_carta; x++){
+                        bool borde = (x == 0 || x == ancho_por_carta -1 || y == 0 || y == alto_por_carta -1);
+                        int index = ((pos_y + y)*ancho + (pos_x + x)) * 3; // Posición que queremos pintar
+                        
+                        if (borde){
+                            pixeles[index] = 180;
+                            pixeles[index + 1] = 180;
+                            pixeles[index + 2] = 180;
+                        } else{
+                            pixeles[index] = 255;
+                            pixeles[index + 1] = 255;
+                            pixeles[index + 2] = 255;
                         }
                     }
                 }
+
+                int find_index = caracter_rango(numero);
+                
+                if(numero == 9){
+                    dibujarCaracter(pixeles, ancho, pos_x + 3, pos_y + 3, 1, palo_carta.b, palo_carta.g, palo_carta.r);
+                    dibujarCaracter(pixeles, ancho, pos_x + 9, pos_y + 3, 0, palo_carta.b, palo_carta.g, palo_carta.r);
+                } else{
+                    dibujarCaracter(pixeles, ancho, pos_x + 3, pos_y + 3, find_index, palo_carta.b, palo_carta.g, palo_carta.r);
+                }
+
             }
 
             return generar_bitmap(ruta, ancho, alto, pixeles);
@@ -288,4 +287,46 @@ class Exporter{
             {0x08, 0x1C, 0x3E, 0x7F, 0x3E, 0x1C, 0x08}, // rombos
             {0x08, 0x1C, 0x2A, 0x6B, 0x3E, 0x08, 0x1C}, // tréboles
         };
+
+        // Dibuja un carácter 5x7 en el buffer
+        static void dibujarCaracter(std::vector<uint8_t>& pixeles, int anchoImg, int px, int py, int fuenteIdx, uint8_t cB, uint8_t cG, uint8_t cR) {
+            for (int fila = 0; fila < 7; fila++) {
+                uint8_t bits = numeros[fuenteIdx][fila];
+                for (int col = 0; col < 5; col++) {
+                    if (bits & (0x10 >> col)) {
+                        int idx = ((py + fila) * anchoImg + (px + col)) * 3;
+                        pixeles[idx]     = cB;
+                        pixeles[idx + 1] = cG;
+                        pixeles[idx + 2] = cR;
+                    }
+                }
+            }
+        }
+
+        // Dibuja un símbolo de palo 7x7 en el buffer
+        static void dibujarPalo(std::vector<uint8_t>& pixeles, int anchoImg, int px, int py, int paloIdx, uint8_t cB, uint8_t cG, uint8_t cR) {
+            for (int fila = 0; fila < 7; fila++) {
+                uint8_t bits = palos[paloIdx][fila];              
+                for (int col = 0; col < 7; col++) {
+                    if (bits & (0x40 >> col)) {
+                        int idx = ((py + fila) * anchoImg + (px + col)) * 3;
+                        pixeles[idx]     = cB;
+                        pixeles[idx + 1] = cG;
+                        pixeles[idx + 2] = cR;
+                    }
+                }
+            }
+        }   
+
+        // Convierte rango (0-12) al índice en caracter5x7
+        // Devuelve -1 para el 10 (caso especial: dos caracteres)
+        static int caracter_rango(int rango) {
+            if (rango == 0)  return 10;  // A
+            if (rango <= 8)  return rango + 1;  // 2=idx2, 3=idx3, ..., 9=idx9
+            if (rango == 9)  return -1;  // 10 → caso especial
+            if (rango == 10) return 11;  // J
+            if (rango == 11) return 12;  // Q
+            if (rango == 12) return 13;  // K
+            return 0;
+        }
 };
