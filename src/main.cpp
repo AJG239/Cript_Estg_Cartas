@@ -160,7 +160,79 @@ void informacion(){
 }
 
 void pruebaApp(){
+    limpiarPantalla();
+    std::cout << "Prueba de sistema \n" << std::endl;
 
+    std::cout << "Aviso: La prueba no guarda los resultados ni codifica el mensaje \n" << std::endl;
+
+    std::cout << "Mensaje: ";
+    std::string mensaje;
+    std::getline(std::cin, mensaje);
+
+    std::string limpio = Transformer::limpiar_texto(mensaje);
+
+    // Paso 1: Texto limpio
+    std::cout << "\n  === Paso 1: Limpiar texto ===" << std::endl;
+    std::cout << "Original:  \"" << mensaje << "\"" << std::endl;
+    std::cout << "Limpio:    \"" << limpio << "\"" << std::endl;
+    std::cout << "Longitud:  " << limpio.size() << "/45" << std::endl;
+
+    // Paso 2: Texto a número
+    std::cout << "\n  === Paso 2: Texto a numero (225 bits) ===" << std::endl;
+
+    LargeNumber numero = Transformer::textoALargeNumber(limpio);
+
+    std::cout << "Numero: " << numero << std::endl;
+
+    // Paso 3: Número a sistema factorial
+    std::cout << "\n  === Paso 3: Numero a sistema factorial ===" << std::endl;
+
+    auto fact = Factoradico::NumeroAFactoradico(numero);
+
+    std::cout << "Numero factorial (" << fact.size() << " digitos): [";
+
+    for (size_t i = 0; i < fact.size() && i < 10; i++) {
+        if (i > 0) std::cout << ", ";
+        std::cout << fact[i];
+    }
+
+    if (fact.size() > 10) std::cout << ", ...";
+
+    std::cout << "]" << std::endl;
+
+    // Paso 4: Número factorial a permutación
+    std::cout << "\n  === Paso 4: Numero factorial a permutacion (Lehmer) ===" << std::endl;
+
+    auto perm = Permutacion_Lehmer::NumeroAPermutacion(numero, 52);
+
+    std::cout << "  Permutacion: [";
+
+    for (size_t i = 0; i < 10; i++) {
+        if (i > 0) std::cout << ", ";
+        std::cout << perm[i];
+    }
+
+    std::cout << ", ...]" << std::endl;
+
+    // Paso 5: Permutación a cartas
+    std::cout << "\n  === Paso 5: Permutacion a cartas ===" << std::endl;
+    std::array<int, 52> baraja;
+
+    for (int i = 0; i < 52; i++) baraja[i] = perm[i];
+    mostrarBaraja(baraja);
+
+    // Paso 6: Verificación inversa
+    std::cout << "\n  === Paso 6: Verificacion inversa ===" << std::endl;
+
+    LargeNumber numBack = Permutacion_Lehmer::PermutacionANumero(perm);
+    
+    std::string textoBack = Transformer::LargeNumberATexto(numBack);
+    std::cout << "  Texto recuperado: \"" << textoBack << "\"" << std::endl;
+
+    bool ok = (textoBack.substr(0, limpio.size()) == limpio);
+    std::cout << "  Verificacion: " << (ok ? "CORRECTA" : "FALLO") << std::endl;
+
+    pausar();
 }
 
 int main(){
