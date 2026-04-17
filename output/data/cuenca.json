@@ -1,0 +1,6 @@
+{
+ "message" : "buenas tarde.", 
+"cifrado" : "xor", 
+"key" : "cuenca", 
+"baraja" : ["4 de Corazones roja", "3 de Corazones roja", "2 de Picas negra", "J de Corazones roja", "2 de Rombos roja", "10 de Picas negra", "10 de Corazones roja", "9 de Picas negra", "AS de Picas negra", "AS de Rombos roja", "6 de Corazones roja", "8 de Picas negra", "J de Treboles negra", "9 de Treboles negra", "5 de Corazones roja", "2 de Treboles negra", "7 de Rombos roja", "AS de Treboles negra", "10 de Treboles negra", "3 de Treboles negra", "9 de Corazones roja", "8 de Rombos roja", "10 de Rombos roja", "Q de Picas negra", "J de Rombos roja", "K de Picas negra", "AS de Corazones roja", "9 de Rombos roja", "6 de Picas negra", "7 de Corazones roja", "K de Treboles negra", "K de Rombos roja", "7 de Treboles negra", "6 de Treboles negra", "4 de Rombos roja", "2 de Corazones roja", "3 de Picas negra", "7 de Picas negra", "J de Picas negra", "5 de Picas negra", "5 de Treboles negra", "Q de Rombos roja", "8 de Treboles negra", "K de Corazones roja", "8 de Corazones roja", "6 de Rombos roja", "Q de Treboles negra", "3 de Rombos roja", "Q de Corazones roja", "5 de Rombos roja", "4 de Picas negra", "4 de Treboles negra"] 
+}
