@@ -304,7 +304,7 @@ class Exporter{
                 for (int col = 0; col < 5; col++) {
                     if (bits & (0x10 >> col)) {
                         int idx = ((py + fila) * anchoImg + (px + col)) * 3;
-                        pixeles[idx]     = cB;
+                        pixeles[idx] = cB;
                         pixeles[idx + 1] = cG;
                         pixeles[idx + 2] = cR;
                     }
@@ -319,7 +319,7 @@ class Exporter{
                 for (int col = 0; col < 7; col++) {
                     if (bits & (0x40 >> col)) {
                         int idx = ((py + fila) * anchoImg + (px + col)) * 3;
-                        pixeles[idx]     = cB;
+                        pixeles[idx] = cB;
                         pixeles[idx + 1] = cG;
                         pixeles[idx + 2] = cR;
                     }

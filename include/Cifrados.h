@@ -88,7 +88,7 @@ class DesplazamientoCifrado : public Cifrados {
 
             LargeNumber keyNum = Transformer::textoALargeNumber(Transformer::limpiar_texto(key));
 
-            // Para no salirnose del rango permitido, tomaremos 52! como el módulo
+            // Para no salirnos del rango permitido, tomaremos 52! como el módulo
             LargeNumber modulo = Factoradico::factorial(52);
 
             // Sumamos ambos elementos para generar el desplazamiento
