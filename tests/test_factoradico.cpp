@@ -32,5 +32,11 @@ int test_factoradico(){
     check("Pad a 5: size=5", small.size() == 5);
     check("Pad no cambia valor", LargeNumber::comparar_numeros(Factoradico::FactoradicoANumero(small), LargeNumber(1)) == 0);
 
+    if (failed == 0){
+        std::cout << "Test de Factradico pasado sin errores" << std::endl;
+    } else{
+         std::cout << "Test de Factoradico pasado con errores: " << failed << std::endl;
+    }
+
     return failed;
 }

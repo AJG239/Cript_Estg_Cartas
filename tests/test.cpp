@@ -11,17 +11,11 @@ int main() {
     int fallos_totales = 0;
 
     fallos_totales += test_largenumber();
-    std::cout << std::endl;
     fallos_totales += test_factoradico();
-    std::cout << std::endl;
     fallos_totales += test_permutation_lehmer();
-    std::cout << std::endl;
     fallos_totales += test_transformer();
-    std::cout << std::endl;
     fallos_totales += test_cifrado();
-    std::cout << std::endl;
     fallos_totales += test_cartas();
-    std::cout << std::endl;
     fallos_totales += test_exporter();
 
     if (fallos_totales == 0) {

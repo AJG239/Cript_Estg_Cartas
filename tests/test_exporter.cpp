@@ -44,5 +44,11 @@ int test_exporter(){
     bool bmpDefault = Exporter::guardarBMP(barajaDefault, "output/images/test_default.bmp");
     check("BMP baraja default", bmpDefault);
 
+    if (failed == 0){
+        std::cout << "Test de Exporter pasado sin errores" << std::endl;
+    } else{
+         std::cout << "Test de Exporter pasado con errores: " << failed << std::endl;
+    }
+
     return failed;
 }

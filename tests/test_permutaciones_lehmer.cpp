@@ -30,5 +30,11 @@ int test_permutation_lehmer(){
     check("[2,0,3,1] valida", Permutacion_Lehmer::PermutacioonValida({2,0,3,1}));
     check("[1,0,1,3] invalida", !Permutacion_Lehmer::PermutacioonValida({1,0,1,3}));
 
+    if (failed == 0){
+        std::cout << "Test de Permutacion_Lehmer pasado sin errores" << std::endl;
+    } else{
+         std::cout << "Test de Permutacione_Lehmer pasado con errores: " << failed << std::endl;
+    }
+
     return failed;
 }

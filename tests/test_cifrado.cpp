@@ -31,5 +31,11 @@ int test_cifrado(){
     check("DesplazamientoCifrado: valiente/clave", probarCifrado("desplazamiento", "hello", "clave"));
     check("DesplazamientoCifrado: mensaje secreto/cartas", probarCifrado("desplazamiento", "mensaje secreto", "cartas"));
 
+    if (failed == 0){
+        std::cout << "Test de Cifrado pasado sin errores" << std::endl;
+    } else{
+         std::cout << "Test de Cifrado pasado con errores: " << failed << std::endl;
+    }
+
     return failed;
 }

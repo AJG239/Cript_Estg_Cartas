@@ -52,5 +52,11 @@ int test_largenumber(){
     check("cociente de 35879/7 = 5125", cociente_2[0] == 5125);
     check("resto de 35879%7 = 4", resto_2 == 4);
 
+    if (failed == 0){
+        std::cout << "Test de LargeNumber pasado sin errores" << std::endl;
+    } else{
+         std::cout << "Test de LargeNumber pasado con errores: " << failed << std::endl;
+    }
+
     return failed;
 }

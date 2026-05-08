@@ -33,5 +33,11 @@ int test_transformer(){
     check("numero no es cero", texto_numero.size() > 0);
     check("ida y vuelta", numero_texto.substr(0, texto.size()) == texto);
 
+    if (failed == 0){
+        std::cout << "Test de Transformer pasado sin errores" << std::endl;
+    } else{
+         std::cout << "Test de Transformer pasado con errores: " << failed << std::endl;
+    }
+
     return failed;
 }

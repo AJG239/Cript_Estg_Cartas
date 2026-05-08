@@ -32,5 +32,11 @@ int test_cartas(){
     std::vector<int> perm(baraja.begin(), baraja.end());
     check("permutacion valida", Permutacion_Lehmer::PermutacioonValida(perm));   
 
+    if (failed == 0){
+        std::cout << "Test de Cartas pasado sin errores" << std::endl;
+    } else{
+         std::cout << "Test de Cartas pasado con errores: " << failed << std::endl;
+    }
+
     return failed;
 }
