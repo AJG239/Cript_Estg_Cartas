@@ -13,6 +13,7 @@ class Exporter{
             std::string cifrado;
             std::string key;
             std::array<int, 52> baraja;
+            std::array<int, 52> indices;
         };
 
         static std::string toJSON(const Info& informacion){
@@ -20,7 +21,7 @@ class Exporter{
 
             // Seguimos la estructura de un JSON para cada una de las lineas del string
             json << "{\n";
-            json << " \"message\" : \"" << caracteres_especiales_JSON(informacion.mensaje) << "\", \n"; // "message" : "mensaje"; 
+            json << "\"message\" : \"" << caracteres_especiales_JSON(informacion.mensaje) << "\", \n"; // "message" : "mensaje"; 
             json << "\"cifrado\" : \"" << caracteres_especiales_JSON(informacion.cifrado) << "\", \n";
             json << "\"key\" : \"" << caracteres_especiales_JSON(informacion.key) <<"\", \n";
             json << "\"baraja\" : [";
@@ -28,6 +29,14 @@ class Exporter{
             for(int i = 0; i < 52; i++){
                 if(i > 0) json << ", ";
                 json << "\"" << Cartas::nombreCarta(informacion.baraja[i]) << "\"";
+            }
+
+            json << "], \n";
+            json << "\"indices\" : [";
+
+            for(int i = 0; i < 52; i++){
+                if(i > 0) json << ", ";
+                json << informacion.baraja[i];       // 0, 24, 51, ... (números)
             }
 
             json << "] \n";

@@ -176,7 +176,7 @@ void decodificarMensaje(){
         try {
             Exporter::Info info = Exporter::cargar_JSON(ruta);
 
-            baraja = info.baraja;
+            baraja = info.indices;
             cifrado = info.cifrado;
             clave = info.key;
 
@@ -349,11 +349,22 @@ int main(){
         std::cout << "2. Decodificar mensaje" << std::endl;
         std::cout << "3. Informacion del sistema" << std::endl;
         std::cout << "4. Prueba" << std::endl;
-
         std::cout << "0. Salir" << std::endl;
 
-        std::cin >> op;
-        std::cin.ignore();
+        std::string linea;
+        std::getline(std::cin, linea);
+
+        if (linea.empty() || std::cin.fail()) {
+            std::cin.clear();
+            continue;
+        }
+
+        try {
+            op = std::stoi(linea);
+        } catch (...) {
+            std::cout << "Opcion no valida" << std::endl;
+            continue;
+        }
 
         switch(op){
             case 1: codificarMensaje(); break;
